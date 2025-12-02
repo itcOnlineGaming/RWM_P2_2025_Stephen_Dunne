@@ -10,18 +10,24 @@ This package provides an actionable approach to logging distractions in real-tim
 
 ## Installation
 
-Copy the package into your SvelteKit project:
+The DistractionLogger is a self-contained, reusable component package. Copy just the package folder to your SvelteKit project:
 
 ```bash
-cp -r src/lib/* your-project/src/lib/
+cp -r src/lib/components/DistractionLogger your-project/src/lib/components/
 ```
 
 Add to your routes:
 
-```typescript
-// src/routes/+page.svelte
-import { DistractionLogger } from '$lib';
+```svelte
+<!-- src/routes/+page.svelte -->
+<script>
+  import { DistractionLogger } from '$lib/components/DistractionLogger';
+</script>
+
+<DistractionLogger />
 ```
+
+That's it! The component includes all dependencies internally (types, stores, utilities).
 
 ## The Problem
 
@@ -47,13 +53,26 @@ The SRL Distraction Logger implements an evidence-based tracking system that:
 
 ### Package Structure
 
+The DistractionLogger is organized as a **self-contained component package** - all dependencies are bundled internally for maximum portability:
+
 ```
-src/lib/
-├── types/           Type definitions for sessions and distractions
-├── stores/          Svelte stores for state management
-├── utils/           Analytics and calculation functions
-└── components/      UI components for each application state
+src/lib/components/DistractionLogger/
+├── DistractionLogger.svelte    # Main component (facade pattern)
+├── StartState.svelte           # Start screen
+├── ActiveSession.svelte        # Active session tracking
+├── SessionResults.svelte       # Results & analytics
+├── session.store.ts            # Svelte stores (bundled)
+├── analytics.utils.ts          # Analytics functions (bundled)
+├── types.ts                    # TypeScript types (bundled)
+├── index.ts                    # Public API exports
+└── README.md                   # Component documentation
 ```
+
+**Key Design Principles:**
+- **Zero External Dependencies**: All imports are relative within the package
+- **Single Entry Point**: Import everything from `DistractionLogger/index.ts`
+- **Portable**: Copy the folder to any Svelte project - it just works
+- **Extensible**: Exports types, stores, and utilities for customization
 
 ### Component Overview
 
@@ -127,9 +146,9 @@ The application uses Svelte stores for reactive state management:
 
 ### Basic Integration
 
-```typescript
+```svelte
 <script lang="ts">
-  import { DistractionLogger } from '$lib';
+  import { DistractionLogger } from '$lib/components/DistractionLogger';
 </script>
 
 <DistractionLogger />
@@ -137,26 +156,62 @@ The application uses Svelte stores for reactive state management:
 
 ### Advanced Integration with Data Persistence
 
-```typescript
+```svelte
 <script lang="ts">
-  import { sessionStore } from '$lib';
-  
+  import { DistractionLogger, sessionStore } from '$lib/components/DistractionLogger';
+
   $effect(() => {
     if ($sessionStore.endTime) {
-      // Save session data
-      saveToDatabase($sessionStore);
+      // Save session data to database or local storage
+      saveToDatabase({
+        duration: $sessionStore.duration,
+        distractions: $sessionStore.distractions,
+        timestamp: $sessionStore.endTime
+      });
     }
   });
 </script>
+
+<DistractionLogger />
 ```
 
 ### Custom Analytics
 
-```typescript
+```svelte
 <script lang="ts">
-  import { calculateFocusScore, generateDistractionHeatmap } from '$lib';
-  
-  const score = calculateFocusScore(duration, distractionCount);
-  const heatmap = generateDistractionHeatmap(distractions, startTime, duration);
+  import {
+    calculateFocusScore,
+    generateDistractionHeatmap,
+    type SessionState
+  } from '$lib/components/DistractionLogger';
+
+  const analyzeSession = (session: SessionState) => {
+    const score = calculateFocusScore(session.duration, session.distractions.length);
+    const heatmap = generateDistractionHeatmap(
+      session.distractions,
+      session.startTime || Date.now(),
+      session.duration
+    );
+
+    return { score, heatmap };
+  };
+</script>
+```
+
+### Accessing All Exports
+
+```svelte
+<script lang="ts">
+  // Everything is available from a single import path
+  import {
+    DistractionLogger,        // Main component
+    sessionStore,             // Session state store
+    elapsedTime,             // Derived elapsed time store
+    DISTRACTION_TYPES,       // Distraction type configurations
+    calculateFocusScore,     // Utility functions
+    formatDuration,
+    type DistractionType,    // TypeScript types
+    type SessionState
+  } from '$lib/components/DistractionLogger';
 </script>
 ```

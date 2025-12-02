@@ -1,14 +1,8 @@
-// Components
-export { default as DistractionLogger } from './components/DistractionLogger.svelte';
-export { default as StartState } from './components/StartState.svelte';
-export { default as ActiveSession } from './components/ActiveSession.svelte';
-export { default as SessionResults } from './components/SessionResults.svelte';
-
-// Stores
-export { sessionStore, elapsedTime } from './stores/session';
-
-// Utilities
+// Re-export the self-contained DistractionLogger package
 export {
+  DistractionLogger,
+  sessionStore,
+  elapsedTime,
   DISTRACTION_TYPES,
   calculateFocusScore,
   generateDistractionHeatmap,
@@ -16,9 +10,8 @@ export {
   getDistractionIntensity,
   formatTime,
   formatDuration
-} from './utils/analytics';
+} from './components/DistractionLogger';
 
-// Types
 export type {
   DistractionType,
   Distraction,
@@ -27,4 +20,4 @@ export type {
   Suggestion,
   HeatmapData,
   DistractionIntensity
-} from './types';
+} from './components/DistractionLogger';
