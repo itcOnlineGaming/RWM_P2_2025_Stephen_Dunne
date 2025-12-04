@@ -78,18 +78,6 @@ Build everything:
 npm run build
 ```
 
-### Running Tests
-
-Run E2E tests:
-```bash
-npm run test:e2e
-```
-
-Run all tests:
-```bash
-npm test
-```
-
 ## Development Workflow
 
 When developing in this monorepo:
@@ -166,11 +154,8 @@ This package provides an actionable approach to logging distractions in real-tim
 Self-regulated learners and knowledge workers face several challenges:
 
 1. **Lack of awareness** - Most people underestimate their distraction frequency
-2. **Pattern blindness** - Without data, it's difficult to identify when distractions cluster
-3. **Generic advice** - Productivity tips rarely account for individual distraction patterns
-4. **No feedback loop** - Improvement requires measurement, but measurement is cumbersome
-
-Traditional approaches like Pomodoro timers or time-blocking provide structure but lack diagnostic capability. They tell you when to work, not why focus was lost or how to adapt.
+2. **Pattern blindness** - Without data, it's difficult to identify when distractions occur or why
+4. **No feedback loop** - Improvement requires measurement, but measurement is time-consuming
 
 ## The Solution
 
