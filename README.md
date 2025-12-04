@@ -1,14 +1,37 @@
-# SRL Distraction Logger
+# @srl/distraction-logger
 
-A Svelte 5 component for tracking and analyzing focus patterns during study sessions.
+A reusable Svelte component package for tracking focus sessions and logging distractions during study or work sessions.
 
-## Quick Installation
+## Features
+
+- **Session Management**: Start, track, and end focus sessions
+- **Distraction Logging**: Three predefined distraction types (Quick Check, Got Distracted, Major Break)
+- **Analytics**: Focus score calculation, distraction heatmap, and personalized suggestions
+- **Zero Dependencies**: Only peer dependency on Svelte 5
+- **TypeScript**: Full type safety with exported types
+- **Exportable**: All utilities, types, and stores available for customization
+
+## Installation
+
+### From npm (when published)
 
 ```bash
-npm install "github:itcOnlineGaming/RWM_P2_2025_Stephen_Dunne#main"
+npm install @srl/distraction-logger
 ```
 
-## Usage
+### Local Development
+
+Use a file reference in your `package.json`:
+
+```json
+{
+  "dependencies": {
+    "@srl/distraction-logger": "file:../path/to/packages/distraction-logger"
+  }
+}
+```
+
+## Basic Usage
 
 ```svelte
 <script lang="ts">
@@ -18,59 +41,87 @@ npm install "github:itcOnlineGaming/RWM_P2_2025_Stephen_Dunne#main"
 <DistractionLogger />
 ```
 
-## Features
+That's it! The component manages all its own state internally.
 
-- 🎯 **Session Tracking** - Start and end focus sessions
-- 📊 **Three-Tier Distraction Logging** - Quick Check, Got Distracted, Major Break
-- 📈 **Focus Score** - Calculate your concentration level (0-100)
-- 🗺️ **Temporal Heatmap** - Visualize when distractions occur
-- 💡 **Smart Suggestions** - Get personalized tips to improve focus
-
-## Development
-
-### Run the Demo
-
-```bash
-npm install
-npm run dev
-```
-
-Open http://localhost:5173
-
-### Build the Package
-
-```bash
-npm run build:package
-```
-
-## Project Structure
+## Package Structure
 
 ```
-├── packages/
-│   └── distraction-logger/    # Main package
-│       ├── src/
-│       │   ├── DistractionLogger.svelte
-│       │   ├── ActiveSession.svelte
-│       │   ├── SessionResults.svelte
-│       │   ├── StartState.svelte
-│       │   ├── session.store.ts
-│       │   ├── analytics.utils.ts
-│       │   ├── types.ts
-│       │   └── index.ts
-│       └── package.json
-├── demo/                      # Demo SvelteKit app
-└── .storybook/               # Component stories
+@srl/distraction-logger/
+├── src/
+│   ├── DistractionLogger.svelte    # Main component (facade)
+│   ├── StartState.svelte           # Start screen
+│   ├── ActiveSession.svelte        # Active session screen
+│   ├── SessionResults.svelte       # Results screen
+│   ├── session.store.ts            # Svelte store for session state
+│   ├── analytics.utils.ts          # Analytics and calculations
+│   ├── types.ts                    # TypeScript type definitions
+│   └── index.ts                    # Public API exports
+├── package.json
+├── tsconfig.json
+└── README.md                       # This file
 ```
 
-## Documentation
+## Advanced Usage
 
-- [Package Documentation](./packages/distraction-logger/README.md)
-- [Setup Guide](./GITHUB_SETUP_GUIDE.md)
-- [Installation Methods](./INSTALLATION.md)
+### Accessing Session State
 
-## Tech Stack
+```svelte
+<script lang="ts">
+  import { DistractionLogger, sessionStore } from '@srl/distraction-logger';
 
-- Svelte 5
-- TypeScript
-- SvelteKit (demo)
-- Vite
+  // Access the current session state
+  $effect(() => {
+    console.log($sessionStore);
+  });
+</script>
+```
+
+### Using Exported Types
+
+```typescript
+import type {
+  DistractionType,
+  SessionState,
+  Suggestion
+} from '@srl/distraction-logger';
+
+const customDistraction: DistractionType = 'quick_check';
+```
+
+### Using Utility Functions
+
+```svelte
+<script lang="ts">
+  import {
+    calculateFocusScore,
+    formatDuration
+  } from '@srl/distraction-logger';
+
+  const score = calculateFocusScore(60, 5); // 60 min session, 5 distractions
+  const formatted = formatDuration(125); // "2h 5m"
+</script>
+```
+
+## API Reference
+
+### Main Component Props
+
+The `DistractionLogger` component accepts no props - it's fully self-contained.
+
+### Exported Store
+
+- `sessionStore`: Main session state store
+  - `startSession()`: Start a new session
+  - `endSession()`: End the current session
+  - `logDistraction(type)`: Log a distraction
+  - `reset()`: Reset to initial state
+
+- `elapsedTime`: Derived store with current elapsed time in seconds
+
+### Exported Utilities
+
+- `calculateFocusScore(duration, distractionCount)`: Calculate focus score (0-100)
+- `generateDistractionHeatmap(distractions, startTime, duration)`: Generate heatmap data
+- `generateSuggestions(duration, distractions, heatmap)`: Generate improvement suggestions
+- `formatTime(seconds)`: Format seconds as MM:SS
+- `formatDuration(minutes)`: Format minutes as Xh Ym

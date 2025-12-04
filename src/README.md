@@ -1,41 +1,24 @@
-# @srl/distraction-logger
+# DistractionLogger Component
 
-A reusable Svelte component package for tracking focus sessions and logging distractions during study or work sessions.
+A self-contained, reusable Svelte component for tracking focus sessions and logging distractions.
 
 ## Features
 
 - **Session Management**: Start, track, and end focus sessions
 - **Distraction Logging**: Three predefined distraction types (Quick Check, Got Distracted, Major Break)
 - **Analytics**: Focus score calculation, distraction heatmap, and personalized suggestions
-- **Zero Dependencies**: Only peer dependency on Svelte 5
+- **Self-contained**: All dependencies bundled - no external imports required
 - **TypeScript**: Full type safety with exported types
-- **Exportable**: All utilities, types, and stores available for customization
 
 ## Installation
 
-### From npm (when published)
-
-```bash
-npm install @srl/distraction-logger
-```
-
-### Local Development
-
-Use a file reference in your `package.json`:
-
-```json
-{
-  "dependencies": {
-    "@srl/distraction-logger": "file:../path/to/packages/distraction-logger"
-  }
-}
-```
+Simply copy the entire `DistractionLogger` folder to your project's components directory.
 
 ## Basic Usage
 
 ```svelte
-<script lang="ts">
-  import { DistractionLogger } from '@srl/distraction-logger';
+<script>
+  import { DistractionLogger } from '$lib/components/DistractionLogger';
 </script>
 
 <DistractionLogger />
@@ -46,19 +29,16 @@ That's it! The component manages all its own state internally.
 ## Package Structure
 
 ```
-@srl/distraction-logger/
-├── src/
-│   ├── DistractionLogger.svelte    # Main component (facade)
-│   ├── StartState.svelte           # Start screen
-│   ├── ActiveSession.svelte        # Active session screen
-│   ├── SessionResults.svelte       # Results screen
-│   ├── session.store.ts            # Svelte store for session state
-│   ├── analytics.utils.ts          # Analytics and calculations
-│   ├── types.ts                    # TypeScript type definitions
-│   └── index.ts                    # Public API exports
-├── package.json
-├── tsconfig.json
-└── README.md                       # This file
+DistractionLogger/
+├── DistractionLogger.svelte    # Main component (facade)
+├── StartState.svelte           # Start screen
+├── ActiveSession.svelte        # Active session screen
+├── SessionResults.svelte       # Results screen
+├── session.store.ts            # Svelte store for session state
+├── analytics.utils.ts          # Analytics and calculations
+├── types.ts                    # TypeScript type definitions
+├── index.ts                    # Public API exports
+└── README.md                   # This file
 ```
 
 ## Advanced Usage
@@ -66,13 +46,11 @@ That's it! The component manages all its own state internally.
 ### Accessing Session State
 
 ```svelte
-<script lang="ts">
-  import { DistractionLogger, sessionStore } from '@srl/distraction-logger';
+<script>
+  import { DistractionLogger, sessionStore } from '$lib/components/DistractionLogger';
 
   // Access the current session state
-  $effect(() => {
-    console.log($sessionStore);
-  });
+  $: console.log($sessionStore);
 </script>
 ```
 
@@ -83,7 +61,7 @@ import type {
   DistractionType,
   SessionState,
   Suggestion
-} from '@srl/distraction-logger';
+} from '$lib/components/DistractionLogger';
 
 const customDistraction: DistractionType = 'quick_check';
 ```
@@ -91,11 +69,11 @@ const customDistraction: DistractionType = 'quick_check';
 ### Using Utility Functions
 
 ```svelte
-<script lang="ts">
+<script>
   import {
     calculateFocusScore,
     formatDuration
-  } from '@srl/distraction-logger';
+  } from '$lib/components/DistractionLogger';
 
   const score = calculateFocusScore(60, 5); // 60 min session, 5 distractions
   const formatted = formatDuration(125); // "2h 5m"
