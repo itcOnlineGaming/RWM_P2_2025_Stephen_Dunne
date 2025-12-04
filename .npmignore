@@ -1,0 +1,26 @@
+# Exclude everything except the package
+/*
+!/packages
+/packages/*
+!/packages/distraction-logger
+
+# Exclude these from the package
+/packages/distraction-logger/node_modules
+/packages/distraction-logger/stories
+/packages/distraction-logger/*.log
+
+# Exclude workspace stuff
+/demo
+/.storybook
+/e2e
+/test-results
+/playwright-report
+/coverage
+
+# Exclude config files
+/.github
+/.vscode
+/.idea
+.DS_Store
+*.log
+*.tgz

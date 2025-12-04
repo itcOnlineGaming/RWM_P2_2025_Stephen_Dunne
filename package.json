@@ -1,27 +1,46 @@
 {
-  "name": "srl-project",
-  "description": "Self-Regulated Learning component library with demo and Storybook",
-  "private": true,
-  "version": "0.0.1",
+  "name": "@srl/distraction-logger",
+  "version": "0.1.0",
+  "description": "Svelte component for tracking distractions during focus sessions",
   "type": "module",
+  "main": "./packages/distraction-logger/dist/index.js",
+  "types": "./packages/distraction-logger/dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./packages/distraction-logger/dist/index.d.ts",
+      "svelte": "./packages/distraction-logger/src/index.ts",
+      "default": "./packages/distraction-logger/dist/index.js"
+    }
+  },
+  "files": [
+    "packages/distraction-logger/dist/**/*",
+    "packages/distraction-logger/src/**/*",
+    "packages/distraction-logger/package.json",
+    "packages/distraction-logger/README.md"
+  ],
+  "keywords": [
+    "svelte",
+    "component",
+    "distraction-tracking",
+    "focus",
+    "productivity"
+  ],
+  "peerDependencies": {
+    "svelte": "^5.0.0"
+  },
   "workspaces": [
     "packages/*",
     "demo"
   ],
   "scripts": {
     "dev": "npm run dev --workspace=demo",
-    "dev:demo": "npm run dev --workspace=demo",
     "build": "npm run build --workspaces --if-present",
     "build:package": "npm run build --workspace=@srl/distraction-logger",
-    "build:demo": "npm run build --workspace=demo",
-    "check": "npm run check --workspaces --if-present",
-    "format": "prettier --write .",
-    "lint": "prettier --check .",
-    "test:unit": "vitest",
+    "prepare": "npm run build:package",
     "test": "npm run test:unit -- --run && npm run test:e2e",
+    "test:unit": "vitest",
     "test:e2e": "playwright test",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook": "storybook dev -p 6006"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",
