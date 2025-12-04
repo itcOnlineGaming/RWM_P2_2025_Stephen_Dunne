@@ -1,16 +1,20 @@
 {
-  "name": "rwm-p2-2025-stephen-dunne",
-  "description": "A TypeScript-based Svelte component library for tracking and improving focus during work sessions",
+  "name": "srl-project",
+  "description": "Self-Regulated Learning component library with demo and Storybook",
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "workspaces": [
+    "packages/*",
+    "demo"
+  ],
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "preview": "vite preview",
-    "prepare": "svelte-kit sync || echo ''",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "dev": "npm run dev --workspace=demo",
+    "dev:demo": "npm run dev --workspace=demo",
+    "build": "npm run build --workspaces --if-present",
+    "build:package": "npm run build --workspace=@srl/distraction-logger",
+    "build:demo": "npm run build --workspace=demo",
+    "check": "npm run check --workspaces --if-present",
     "format": "prettier --write .",
     "lint": "prettier --check .",
     "test:unit": "vitest",

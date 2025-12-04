@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DistractionLogger } from '$lib';
+  import { DistractionLogger } from '@srl/distraction-logger';
 </script>
 
 <svelte:head>
